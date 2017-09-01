@@ -1,6 +1,10 @@
+import xbox
 import RPi.GPIO as GPIO
-from time import sleep
- 
+
+def fmtFloat(n):
+    return '{:6.3f}'.format(n)
+    
+joy = xbox.Joystick()
 GPIO.setmode(GPIO.BOARD)
 #Front Left
 Motor1A = 11
@@ -20,8 +24,6 @@ Motor2D =38
 PWMD = 40
 
 Turret = 7
-
-########################################################################
 
 def setup():
 #Left Side
@@ -139,14 +141,85 @@ def wheelReverse_BackR():
 
 
 
-def wheelOff():
+def wheelOffL():
     GPIO.output(PWMB,GPIO.LOW)
     GPIO.output(PWMA, GPIO.LOW)
+def wheelOffR():
     GPIO.output(PWMC,GPIO.LOW)
     GPIO.output(PWMD, GPIO.LOW)
 
-#############################################################################
 
-if __name__ == "__main__":
+"""
+
+
+
+"""
+while not joy.Back():
     setup()
+    # Show connection status
+    if joy.connected():
+        print ("Connected"),
+    else:
+        print ("Disconnected"),
+    # Left analog stick
+    print ("Lx,Ly ",fmtFloat(joy.leftX()),fmtFloat(joy.leftY()),)
+    if joy.leftY()>0:
+        wheelForwardL()
+    elif joy.leftY()==0:
+        wheelOffL()
+    if joy.leftY()<0:
+        wheelReverseL()
+    #Right Analog Stick
+    if joy.rightY()>0:
+        wheelForwardR()
+    elif joy.rightY()==0:
+        wheelOffR()
+    if joy.rightY()<0:
+        wheelReverseR()
+    # Right trigger
+    print ("Rtrg ",fmtFloat(joy.rightTrigger()),)
+    # A/B/X/Y buttons
+    print ("Buttons ",)
+    if joy.A():
+        print ("A",)
+    else:
+        print (" ",)
+    if joy.B():
+        print ("B",)
+    else:
+        print (" ",)
+    if joy.X():
+        print ("X",)
+    else:
+        print (" ",)
+    if joy.Y():
+        print ("Y",)
+    else:
+        print (" ",)
+    # Dpad U/D/L/R
+    print ("Dpad ",)
+    if joy.dpadUp():
+        print ("U",)
+    else:
+        print (" ",)
+    if joy.dpadDown():
+        print ("D",)
+    else:
+        print (" ",)
+    if joy.dpadLeft():
+        print ("L",)
+    else:
+        print (" ",)
+    if joy.dpadRight():
+        print ("R",)
+    else:
+        print (" ",)
+    # Move cursor back to start of line
+    print (chr(13),)
+"""
+
+
+"""
+
+
 
