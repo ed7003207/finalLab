@@ -1,5 +1,9 @@
 import xbox
 import RPi.GPIO as GPIO
+<<<<<<< HEAD
+=======
+from time import sleep
+>>>>>>> b67f30e4b0023caa6b94856100cb92c1c9a0c255
 
 def fmtFloat(n):
     return '{:6.3f}'.format(n)
@@ -214,6 +218,10 @@ while not joy.Back():
         print ("R",)
     else:
         print (" ",)
+<<<<<<< HEAD
+=======
+        
+>>>>>>> b67f30e4b0023caa6b94856100cb92c1c9a0c255
     # Move cursor back to start of line
     print (chr(13),)
 """
