@@ -1,26 +1,65 @@
-"""
-import RPi.GPIO as GPIO                                 ## Import GPIO Library.
-import time                                 ## Import ‘time’ library for a delay.
+# Libraries
+import RPi.GPIO as GPIO
+import time
  
-GPIO.setmode(GPIO.BOARD)                    ## Use BOARD pin numbering.
-GPIO.setup(7, GPIO.OUT)                    ## set output.
+# GPIO Mode (BOARD / BCM)
+GPIO.setmode(GPIO.BOARD)
  
-pwm=GPIO.PWM(7,100)                        ## PWM Frequency
-pwm.start(5)
- 
-angle1=10
-duty1= float(angle1)/10 + 2.5               ## Angle To Duty cycle  Conversion
- 
-angle2=160
-duty2= float(angle2)/10 + 2.5
+# set GPIO Pins
+GPIO_Servo = 7
 
-ck=0
-while ck<=5:
-     pwm.ChangeDutyCycle(duty1)
-     time.sleep(0.8)
-     pwm.ChangeDutyCycle(duty2)
-     time.sleep(0.8)
-     ck=ck+1
-time.sleep(1)
-GPIO.cleanup()
-"""
+# set GPIO direction (IN / OUT)
+GPIO.setup(GPIO_Servo, GPIO.OUT)
+
+
+
+# Set PWM parameters
+pwm_frequency = 50
+
+def set_duty_cycle(angle):
+    pulse =  2*float(angle)/180.0 + 0.5
+    duty = 0.1*pulse*pwm_frequency
+    #duty = 2.5 + 0.12*float(angle) for frequency of 100
+    return duty
+
+    
+# set speed to HIGH
+pwm_servo = GPIO.PWM(GPIO_Servo, pwm_frequency)
+
+
+
+if __name__ == '__main__':
+    try:
+        
+        while True:
+            
+            angle = 0
+            pwm_servo.start(set_duty_cycle(angle))
+            print ("0")
+            time.sleep(1)
+
+            angle = 45
+            pwm_servo.start(set_duty_cycle(angle))
+            print ("45")
+            time.sleep(1)
+            
+            angle = 90
+            pwm_servo.start(set_duty_cycle(angle))
+            print ("90")
+            time.sleep(1)
+
+            angle = 135
+            pwm_servo.start(set_duty_cycle(angle))
+            print ("135")
+            time.sleep(1)
+
+            angle = 180
+            pwm_servo.start(set_duty_cycle(angle))
+            print ("180")
+            time.sleep(1)
+  
+    # Reset by pressing CTRL + C
+    except KeyboardInterrupt:
+        print("Program stopped by User")
+        GPIO.cleanup()
+
