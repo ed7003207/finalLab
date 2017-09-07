@@ -149,9 +149,32 @@ def wheelOffR():
     GPIO.output(PWMC,GPIO.LOW)
     GPIO.output(PWMD, GPIO.LOW)
 
-def time():
-    timeStart = time.time()
-
+def lenChecker():
+    if len(movementL)>1 or len(movementR)>1 or len(directionL)>1 or len(directionR)>1:
+        if len(movementL) > len(movementR):
+            if movementL[-1] != 0:
+                if movementL[-2] == 0:
+                    del movementL[-2]
+            else:
+                del movementL[-1]
+        if len(movementR) > len(movementL):
+            if movementR[-1] != 0:
+                if movementR[-2] == 0:
+                    del movementR[-2]
+            else:
+                del movementR[-1]
+        if len(directionL) > len(directionR):
+            if directionL[-1] != "0":
+                if directionL[-2] == 0:
+                    del directionL[-2]
+            else:
+                del directionL[-1]
+        if len(directionR) > len(directionL):
+            if directionR[-1] != "0":
+                if directionR[-2] == 0:
+                    del directionR[-2]
+            else: 
+                del directionR[-1]
 """
 
 
@@ -168,65 +191,171 @@ wheelRL = 0
 wheelFR = 0
 wheelRR = 0
 while not joy.Back():
-    setup()
-
-    if joy.leftY()>0:
+    setup()   
+    lenChecker()
+    if joy.leftY()>0 and right == 0:
         left = 1
         wheelFL = wheelFL + 1
         wheelForwardL()
     elif (joy.leftY()==0) and (left == 1):
-        left = 0
         movementL.append(wheelFL)
-        if joy.rightY() == 0:
+        if right == 0:
             movementR.append(wheelRL)
             directionR.append("0")
         wheelFL = 0
         directionL.append("wheelForwardL")
+        left = 0
         wheelOffL()
-    if joy.leftY()<0:
+    if joy.leftY()<0 and right == 0:
         left = -1
         wheelRL = wheelRL + 1
         wheelReverseL()
     elif (joy.leftY()==0) and (left == -1):
-        left = 0
         movementL.append(wheelRL)
-        if joy.rightY() == 0:
+        if right == 0:
             movementR.append(wheelRR)
             directionR.append("0")
         wheelRL = 0
         directionL.append("wheelReverseL")
+        left = 0
         wheelOffL()
 
+    if joy.leftY()>0 and right == 1:
+        left = 1
+        wheelFL = wheelFL + 1
+        wheelForwardL()
+    elif (joy.leftY()==0) and (left == 1):
+        movementL.append(wheelFL)
+        if right == 0:
+            movementR.append(wheelRL)
+            directionR.append("0")
+        wheelFL = 0
+        directionL.append("wheelForwardL")
+        left = 0
+        wheelOffL()
+    if joy.leftY()<0 and right == -1:
+        left = -1
+        wheelRL = wheelRL + 1
+        wheelReverseL()
+    elif (joy.leftY()==0) and (left == -1):
+        movementL.append(wheelRL)
+        if right == 0:
+            movementR.append(wheelRR)
+            directionR.append("0")
+        wheelRL = 0
+        directionL.append("wheelReverseL")
+        left = 0
+        wheelOffL()
+        
+    if joy.leftY()>0 and right == -1:
+        left = 1
+        wheelFL = wheelFL + 1
+        wheelForwardL()
+    elif (joy.leftY()==0) and (left == 1):
+        movementL.append(wheelFL)
+        if right == 0:
+            movementR.append(wheelRL)
+            directionR.append("0")
+        wheelFL = 0
+        directionL.append("wheelForwardL")
+        left = 0
+        wheelOffL()
+    if joy.leftY()<0 and right == 1:
+        left = -1
+        wheelRL = wheelRL + 1
+        wheelReverseL()
+    elif (joy.leftY()==0) and (left == -1):
+        movementL.append(wheelRL)
+        if right == 0:
+            movementR.append(wheelRR)
+            directionR.append("0")
+        wheelRL = 0
+        directionL.append("wheelReverseL")
+        left = 0
+        wheelOffL()
 
         
     #Right Analog Stick
-    if joy.rightY()>0:
+    if joy.rightY()>0 and left == 0:
         right = 1
         wheelFR = wheelFR + 1
         wheelForwardR()
     elif (joy.rightY()==0) and (right == 1):
-        right = 0
         movementR.append(wheelFR)
-        if joy.leftY() == 0:
+        if left == 0:
             movementL.append(wheelFL)
             directionL.append("0")
         wheelRL = 0
-        directionR.append("wheelReverseR")
+        directionR.append("wheelForwardR")
+        right = 0
         wheelOffR()
-    if joy.rightY()<0:
+    if joy.rightY()<0 and left ==0:
         right = -1
         wheelRR = wheelRR + 1
         wheelReverseR()
     elif (joy.rightY()==0) and (right == -1):
-        right = 0
         movementR.append(wheelRR)
-        if joy.leftY() == 0:
+        if left == 0:
             movementL.append(wheelRL)
             directionL.append("0")
         wheelRR = 0
         directionR.append("wheelReverseR")
+        right = 0
         wheelOffR()
 
+    if joy.rightY()>0 and left == 1:
+        right = 1
+        wheelFR = wheelFR + 1
+        wheelForwardR()
+    elif (joy.rightY()==0) and (right == 1):
+        movementR.append(wheelFR)
+        if left == 0:
+            movementL.append(wheelFL)
+            directionL.append("0")
+        wheelRL = 0
+        directionR.append("wheelForwardR")
+        right = 0
+        wheelOffR()
+    if joy.rightY()<0 and left == -1:
+        right = -1
+        wheelRR = wheelRR + 1
+        wheelReverseR()
+    elif (joy.rightY()==0) and (right == -1):
+        movementR.append(wheelRR)
+        if left == 0:
+            movementL.append(wheelRL)
+            directionL.append("0")
+        wheelRR = 0
+        directionR.append("wheelReverseR")
+        right = 0
+        wheelOffR()
+
+    if joy.rightY()>0 and left == -1:
+        right = 1
+        wheelFR = wheelFR + 1
+        wheelForwardR()
+    elif (joy.rightY()==0) and (right == 1):
+        movementR.append(wheelFR)
+        if left == 0:
+            movementL.append(wheelFL)
+            directionL.append("0")
+        wheelRL = 0
+        directionR.append("wheelForwardR")
+        right = 0
+        wheelOffR()
+    if joy.rightY()<0 and left == 1:
+        right = -1
+        wheelRR = wheelRR + 1
+        wheelReverseR()
+    elif (joy.rightY()==0) and (right == -1):
+        movementR.append(wheelRR)
+        if left == 0:
+            movementL.append(wheelRL)
+            directionL.append("0")
+        wheelRR = 0
+        directionR.append("wheelReverseR")
+        right = 0
+        wheelOffR()
 
     print (movementL)
     print (movementR)
